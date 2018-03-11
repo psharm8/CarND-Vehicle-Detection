@@ -6,7 +6,7 @@
 
 The goals / steps of this project are the following:
 
-* Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier Linear SVM classifier
+* Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labelled training set of images and train a classifier Linear SVM classifier
 * Optionally, you can also apply a color transform and append binned color features, as well as histograms of color, to your HOG feature vector. 
 * Note: for those first two steps don't forget to normalize your features and randomize a selection for training and testing.
 * Implement a sliding-window technique and use your trained classifier to search for vehicles in images.
@@ -18,9 +18,6 @@ The goals / steps of this project are the following:
 [image2]: ./output_images/simple_bbox.png
 [image3]: ./output_images/heatmaps.png
 [image4]: ./output_images/heatmap_threshold_bbox.png
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
 [video1]: ./project_video_out.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
@@ -37,7 +34,7 @@ You're reading it!
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in code cells 2 thorugh 9 of the IPython notebook `vehicle_detection.jpynb`. Cell 9 makes the actual call to extract features on all training images.
+The code for this step is contained in code cells 2 through 9 of the IPython notebook `vehicle_detection.jpynb`. Cell 9 makes the actual call to extract features on all training images.
 
 I started by reading in all the `vehicle` and `non-vehicle` images and then passing them through the `extract_features(...)` method defined in code cell 7 which utilizes the function `get_hog_features(...)` from code cell 3.
 
@@ -50,14 +47,14 @@ Here is an example using the Red channel from `RGB` color space and HOG paramete
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
-I mostly stuck to the parameters introduced during lesson videos and realized they worked fairly well. I did, however decide to include spatial and histogram features with the HOG features which increased the model accuracy. I noticed that YCrCb color space along with spatial and histogram features gave a good test accuracy of about 98.7%.
+I mostly stuck to the parameters introduced during lesson videos and realized they worked well. I did however decide to include spatial and histogram features with the HOG features which increased the model accuracy. I noticed that YCrCb color space along with spatial and histogram features gave a good test accuracy of about 98.7%.
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-In code cell 10 I frist shuffled and made a 90-10 split of data into training and test set. Since I was using three feature sets together I used the `StandardScaler()` to normalize the feature vectors.
+In code cell 10 I first shuffled and made a 90-10 split of data into training and test set. Since I was using three feature sets together I used the `StandardScaler()` to normalize the feature vectors.
 
 
-Then I trained a linear SVM using `LinearSVC()` from sklearn library (code cell 11) and dumped the trained model to a pickel file `model_info.p`. The pickle also included various paramertes that were required for the extraction of features. This helped me train the model once to my satisfaction and then repeat the detection part only by changing the detection releated parameters such as window overlaps, scales, heatmap thresholds, etc.
+Then I trained a linear SVM using `LinearSVC()` from sklearn library (code cell 11) and dumped the trained model to a pickle file `model_info.p`. The pickle also included various parameters that were required for the extraction of features. This helped me train the model once to my satisfaction and then repeat the detection part only by changing the detection related parameters such as window overlaps, scales, heatmap thresholds, etc.
 
 Here is a sample of simple car detection without any measures to suppress the false positives or multiple detection.
 
@@ -67,14 +64,14 @@ Here is a sample of simple car detection without any measures to suppress the fa
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-As introduced in the lesson material, I used the sliding window stepping 2 cells for every window slide. I limited the window ROI to the lower half of the frame as we won't expect cars in the upper half (atleast for this project video).
+As introduced in the lesson material, I used the sliding window stepping 2 cells for every window slide. I limited the window ROI to the lower half of the frame as we won't expect cars in the upper half (at least for this project video).
 
-For the scales, it took a while but I figured that training samples were were 64x64 but the cars on 1280x720 frame would mostly appear larger than 64x64. So, I set multiple scales from 1.1 to 2.5 (4 scales), which increased the process time for each frame considerably. It takes about 2.3 seconds per frame to detect, heatmap, threshold and draw boxes. 
+For the scales, it took a while, but I figured that training samples were 64x64 but the cars on 1280x720 frame would mostly appear larger than 64x64. So, I set multiple scales from 1.1 to 2.5 (4 scales). It increased the process time for each frame considerably, but the detection was good. It takes about 2.3 seconds per frame to detect, heatmap, threshold and draw boxes. 
 
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on 4 scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+Ultimately, I searched on 4 scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
 
 ![alt text][image4]
 ---
@@ -91,12 +88,12 @@ I recorded the positions of positive detections in each frame of the video.  Fro
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
 
-### Here are six frames and their corresponding heatmaps:
+### Here are six heatmaps of test images:
 
 ![alt text][image3]
 
 
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
+### Here the resulting bounding boxes are drawn after labelling:
 ![alt text][image4]
 
 ---
@@ -105,10 +102,10 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-The first thing that comes to mind about this implementation is the time it takes to process each frame. It is no where near real-time and can not be used for vehicle detection for self driving cars in its current form. There are potential places where multithreading or even GPU compute (like CUDA or OpenCL) can be utilized to extract the feature vectors efficiently. 
+The first thing that comes to mind about this implementation is the time it takes to process each frame. It is nowhere near real-time and cannot be used for vehicle detection for self-driving cars in its current form. There are potential places where multithreading or even GPU compute (like CUDA or OpenCL) can be utilized to extract the feature vectors efficiently. 
 
-Furthermore, at about 41 seconds in, the video has a spot on the left with a tree shadow which I could not manage to exclude as a false positive without affecting the true detections. I believe that can be fixed with more robust training data or using deep-learning concepts as in traffic sign classifier which definitely outperformed car detection using Linear SVM.
+Furthermore, at about 41 seconds in, the video has a spot on the left with a tree shadow which I could not manage to exclude as a false positive without affecting the true detections. I believe that can be fixed with more robust training data or using deep-learning concepts as in traffic sign classifier which outperformed car detection using Linear SVM.
 
 
-Another potential pitfall would be a steep up-hill drive where the cars may appear on the upper half of thr frame. This means, increasing the search space and in-turn increasing the detection time.  
+Another potential pitfall would be a steep up-hill drive where the cars may appear on the upper half of the frame. This means, increasing the search space and in-turn increasing the detection time.  
 
