@@ -104,3 +104,4 @@ ENV/
 # misc
 vehicles/
 non-vehicles/
+.idea/
