@@ -47,7 +47,7 @@ Here is an example using the Red channel from `RGB` color space and HOG paramete
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
-I mostly stuck to the parameters introduced during lesson videos and realized they worked well. I did however decide to include spatial and histogram features with the HOG features which increased the model accuracy. I noticed that YCrCb color space along with spatial and histogram features gave a good test accuracy of about 98.7%.
+After some tweaking of the parameters I went back to the values introduced during lesson videos as they worked well without making the feature vector too long. I decided to include spatial and histogram features with the HOG features as it increased the model accuracy. I noticed that YCrCb color space along with spatial and histogram features gave a good test accuracy of about 98.7%.
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
